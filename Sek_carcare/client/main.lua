@@ -22,12 +22,10 @@ local Washing = false
 local second = 1000
 
 Checkcar = false
+ESX = exports["es_extended"]:getSharedObject()
 
 Citizen.CreateThread(function()
-	while ESX == nil do
-		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-		Citizen.Wait(0)
-	end
+	ESX = exports["es_extended"]:getSharedObject()
 	CreateMechanicPed()
 end)
 
@@ -44,7 +42,7 @@ function DisplayHelpText(str)
 	DisplayHelpTextFromStringLabel(0, 0, 1, -1)
 end
 
-DrawText3D = function(coordsx,coordsy,coordsz,text)
+DrawText3Ds = function(coordsx,coordsy,coordsz,text)
     SetTextScale(0.30, 0.30)
     ---SetTextColour(0, 200, 100, 255)
     SetTextEntry("STRING")
@@ -67,7 +65,7 @@ Citizen.CreateThread(function()
 
 		SetBlipSprite (blip, 402)
 		SetBlipDisplay(blip, 4)
-		SetBlipScale  (blip, 1.0)
+		SetBlipScale  (blip, 0.5)
 		SetBlipColour (blip, 64)
 		SetBlipAsShortRange(blip, true)
 
@@ -159,6 +157,7 @@ Citizen.CreateThread(function()
 	end
 end)
 
+
 Citizen.CreateThread(function()
 	while true do
 		Sleep = 1000
@@ -184,12 +183,17 @@ Citizen.CreateThread(function()
 									price = v.price,
 								})
 							else
-								exports['mythic_notify']:Sendalert('error', 'รถคันนี้ไม่สามารถซ่อมได้')
+								TriggerEvent("mythic_notify:client:SendAlert",{ 
+									text = 'รถคันนี้ไม่สามารถซ่อมได้ ! ! !',
+									type = "error",
+									timeout = 3000,
+								})
 							end
 						end
 					end
 					if opene then
-						Draw(VehicleCoords.x,VehicleCoords.y,VehicleCoords.z + 1, '<font face="font4thai">~w~กด [~r~E~w~] ~w~ เพื่อเปิดเมนู ~b~ CAR CARE </font>')
+						
+						DrawText3Ds(VehicleCoords.x,VehicleCoords.y,VehicleCoords.z + 0.41, '<font face="font4thai">~w~กด [~r~E~w~] ~w~ เพื่อเปิดเมนู ~b~ CAR CARE </font>')
 					end
 				end
 			end
@@ -212,9 +216,18 @@ RegisterNUICallback('Yes', function(data, cb)
 						opene = false
 						Checkcar = true
 						TriggerServerEvent('Sek_carcare:removemoney',v.price)
-						exports['mythic_notify']:Sendalert('success', 'คุณใช้บริการเปิดดูค่ารถ ราคา '..v.price..' บาท')
+		
+						TriggerEvent("mythic_notify:client:SendAlert",{ 
+							text = 'คุณใช้บริการเปิดดูค่ารถ ราคา '..v.price..' บาท',
+							type = "inform",
+							timeout = 3000,
+						})
 					else
-						exports['mythic_notify']:Sendalert('error', 'คุณมีเเงินไม่เพียงพอ')
+						TriggerEvent("mythic_notify:client:SendAlert",{ 
+							text = 'คุณมีเเงินไม่เพียงพอ',
+							type = "error",
+							timeout = 3000,
+						})
 						FreezeEntityPosition(VehicleSit, false)
 					end
 				end,v.price)
@@ -223,9 +236,17 @@ RegisterNUICallback('Yes', function(data, cb)
 					if checkmoneyCheck then
 						TriggerServerEvent('Sek_carcare:removemoney',v.price)
 						StartingRepairCar('all')
-						exports['mythic_notify']:Sendalert('success', 'คุณใช้บริการซ่อมทั้งหมด ราคา '..v.price..' บาท')
+						TriggerEvent("mythic_notify:client:SendAlert",{ 
+							text = 'คุณใช้บริการซ่อมทั้งหมด ราคา '..v.price..' บาท',
+							type = "success",
+							timeout = 3000,
+						})
 					else
-						exports['mythic_notify']:Sendalert('error', 'คุณมีเเงินไม่เพียงพอ')
+						TriggerEvent("mythic_notify:client:SendAlert",{ 
+							text = 'คุณมีเเงินไม่เพียงพอ',
+							type = "error",
+							timeout = 3000,
+						})
 						FreezeEntityPosition(VehicleSit, false)
 					end
 				end,v.price)
@@ -234,9 +255,17 @@ RegisterNUICallback('Yes', function(data, cb)
 					if checkmoneyCheck then
 						TriggerServerEvent('Sek_carcare:removemoney',v.price)
 						StartingRepairCar('body')
-						exports['mythic_notify']:Sendalert('success', 'คุณใช้บริการซ่อมภายนอก ราคา '..v.price..' บาท')
+						TriggerEvent("mythic_notify:client:SendAlert",{ 
+							text = 'คุณใช้บริการซ่อมภายนอก ราคา '..v.price..' บาท',
+							type = "success",
+							timeout = 3000,
+						})
 					else
-						exports['mythic_notify']:Sendalert('error', 'คุณมีเเงินไม่เพียงพอ')
+						TriggerEvent("mythic_notify:client:SendAlert",{ 
+							text = 'คุณมีเเงินไม่เพียงพอ',
+							type = "error",
+							timeout = 3000,
+						})
 						FreezeEntityPosition(VehicleSit, false)
 					end
 				end,v.price)
@@ -245,9 +274,17 @@ RegisterNUICallback('Yes', function(data, cb)
 					if checkmoneyCheck then
 						TriggerServerEvent('Sek_carcare:removemoney',v.price)
 						StartingRepairCar('engine')
-						exports['mythic_notify']:Sendalert('success', 'คุณใช้บริการซ่อมเครื่องยนต์ ราคา '..v.price..' บาท')
+						TriggerEvent("mythic_notify:client:SendAlert",{ 
+							text = 'คุณใช้บริการซ่อมเครื่องยนต์ ราคา '..v.price..' บาท',
+							type = "success",
+							timeout = 3000,
+						})
 					else
-						exports['mythic_notify']:Sendalert('error', 'คุณมีเเงินไม่เพียงพอ')
+						TriggerEvent("mythic_notify:client:SendAlert",{ 
+							text = 'คุณมีเเงินไม่เพียงพอ',
+							type = "error",
+							timeout = 3000,
+						})
 						FreezeEntityPosition(VehicleSit, false)
 					end
 				end,v.price)
@@ -256,9 +293,17 @@ RegisterNUICallback('Yes', function(data, cb)
 					if checkmoneyCheck then
 						TriggerServerEvent('Sek_carcare:removemoney',v.price)
 						StartingWashCar('Wash')
-						exports['mythic_notify']:Sendalert('success', 'คุณใช้บริการล้างรถ ราคา '..v.price..' บาท')
+						TriggerEvent("mythic_notify:client:SendAlert",{ 
+							text = 'คุณใช้บริการล้างรถ ราคา '..v.price..' บาท',
+							type = "success",
+							timeout = 3000,
+						})
 					else
-						exports['mythic_notify']:Sendalert('error', 'คุณมีเเงินไม่เพียงพอ')
+						TriggerEvent("mythic_notify:client:SendAlert",{ 
+							text = 'คุณมีเเงินไม่เพียงพอ',
+							type = "error",
+							timeout = 3000,
+						})
 						FreezeEntityPosition(VehicleSit, false)
 					end
 				end,v.price)
@@ -267,9 +312,17 @@ RegisterNUICallback('Yes', function(data, cb)
 					if checkmoneyCheck then
 						TriggerServerEvent('Sek_carcare:removemoney',v.price)
 						StartingWashCar('Kloom')
-						exports['mythic_notify']:Sendalert('success', 'คุณใช้บริการเคลือบแก้ว ราคา '..v.price..' บาท')
+						TriggerEvent("mythic_notify:client:SendAlert",{ 
+							text = 'คุณใช้บริการเคลือบแก้ว ราคา '..v.price..' บาท',
+							type = "success",
+							timeout = 3000,
+						})
 					else
-						exports['mythic_notify']:Sendalert('error', 'คุณมีเเงินไม่เพียงพอ')
+						TriggerEvent("mythic_notify:client:SendAlert",{ 
+							text = 'คุณมีเเงินไม่เพียงพอ',
+							type = "error",
+							timeout = 3000,
+						})
 						FreezeEntityPosition(VehicleSit, false)
 					end
 				end,v.price)
@@ -366,7 +419,6 @@ Citizen.CreateThread(function()
 		Citizen.Wait(Sleep)
 	end
 end)
-
 
 function StartingRepairCar(type)
 	for k, v in pairs(Mechanic_Ped) do

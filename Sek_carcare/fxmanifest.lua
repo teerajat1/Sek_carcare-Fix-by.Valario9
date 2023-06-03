@@ -27,3 +27,4 @@ files {
   'html/close.mp3',
   "html/img/*.png",
 }
+shared_script '@es_extended/imports.lua'

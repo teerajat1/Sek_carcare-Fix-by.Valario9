@@ -1,6 +1,6 @@
 ESX = nil
 
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+ESX = exports["es_extended"]:getSharedObject()
 
 ESX.RegisterServerCallback('Sek_carcare:checkmoneyCheck', function(source, cb, checkmoneyCheck)
 	local xPlayer = ESX.GetPlayerFromId(source)
