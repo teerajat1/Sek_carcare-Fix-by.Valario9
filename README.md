@@ -1,2 +1,3 @@
 # Sek_carcare-Fix-by.Valario9
-https://cdn.discordapp.com/attachments/961227099639795781/1114570156010647623/image.png
+
+![image](https://github.com/teerajat1/Sek_carcare-Fix-by.Valario9/assets/30536797/5564d259-b497-449e-ad59-20f9fe3b08ea)
